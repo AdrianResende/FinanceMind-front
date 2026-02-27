@@ -1,0 +1,24 @@
+{
+  "common": {
+    "welcome": "Bem-vindo",
+    "login": "Entrar",
+    "logout": "Sair",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "edit": "Editar",
+    "delete": "Excluir",
+    "search": "Buscar",
+    "loading": "Carregando..."
+  },
+  "home": {
+    "title": "Início",
+    "description": "Página inicial"
+  },
+  "auth": {
+    "email": "E-mail",
+    "password": "Senha",
+    "forgotPassword": "Esqueceu a senha?",
+    "noAccount": "Não tem uma conta?",
+    "signUp": "Cadastre-se"
+  }
+}
