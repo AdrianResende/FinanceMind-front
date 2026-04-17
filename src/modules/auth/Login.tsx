@@ -25,6 +25,21 @@ export default function Login() {
     }
   }, [isAuthenticated, navigate]);
 
+  const loginInDemoMode = () => {
+    login(
+      {
+        id: 'demo-user',
+        name: 'Usuário Demo',
+        email: email.trim().toLowerCase() || 'demo@financemind.com',
+        avatar: 'https://api.dicebear.com/7.x/avataaars/svg?seed=FinanceMindDemo',
+        role: 'user',
+      },
+      'demo-token'
+    );
+
+    navigate(redirectTo, { replace: true });
+  };
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
@@ -101,10 +116,14 @@ export default function Login() {
             <Button type="submit" disabled={isSubmitting} className="h-11 w-full bg-brand-teal-600 hover:bg-brand-teal-700 disabled:opacity-70">
               {isSubmitting ? 'Entrando...' : 'Entrar e liberar conteúdo'}
             </Button>
+
+            <Button type="button" variant="outline" onClick={loginInDemoMode} className="h-11 w-full">
+              Entrar sem backend por enquanto
+            </Button>
           </form>
 
           <p className="mt-4 text-sm text-gray-500">
-            O login desta tela consome o backend em VITE_API_URL usando o endpoint configurado em VITE_AUTH_LOGIN_PATH.
+            O formulário segue preparado para backend em VITE_API_URL + VITE_AUTH_LOGIN_PATH, mas você pode usar o acesso temporário de demonstração enquanto a API não estiver pronta.
           </p>
         </section>
 
