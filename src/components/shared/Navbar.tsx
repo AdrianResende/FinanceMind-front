@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Link, useLocation } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
@@ -18,6 +18,7 @@ interface NavbarProps {
 }
 
 export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
+  const navigate = useNavigate()
   const location = useLocation()
   const { user, isAuthenticated, logout } = useAuthStore()
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
@@ -34,10 +35,15 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
     return () => document.removeEventListener('mousedown', handleClickOutside)
   }, [])
 
-  const defaultItems: NavItem[] = [
-    { label: 'Início', href: '/' },
-    { label: 'Dashboard', href: '/dashboard' },
-  ]
+  const defaultItems: NavItem[] = isAuthenticated
+    ? [
+        { label: 'Início', href: '/' },
+        { label: 'Simulação', href: '/dashboard' },
+      ]
+    : [
+        { label: 'Início', href: '/' },
+        { label: 'Como Funciona', href: '/#como-funciona' },
+      ]
 
   const navigationItems = items.length > 0 ? items : defaultItems
 
@@ -114,6 +120,7 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
                   onClick={() => {
                     logout()
                     setDropdownOpen(false)
+                    navigate('/')
                   }}
                   className="text-red-600 hover:bg-red-50"
                 >
@@ -125,9 +132,6 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
             <div className="flex items-center gap-2">
               <Button variant="outline" size="sm" asChild>
                 <Link to="/login">Entrar</Link>
-              </Button>
-              <Button size="sm" asChild>
-                <Link to="/cadastro">Cadastrar</Link>
               </Button>
             </div>
           )}

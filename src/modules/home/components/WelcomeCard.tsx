@@ -6,7 +6,7 @@ export default function WelcomeCard() {
     <div className="rounded-lg border bg-gradient-to-br from-black to-gray-800 p-6 shadow-sm text-white">
       <h2 className="text-xl font-semibold">👋 Bem-vindo!</h2>
       <p className="mt-2 text-sm text-gray-200">
-        Comece a organizar suas finanças agora mesmo.
+        Comece com a visão geral e entre para liberar simulações e explicações completas.
       </p>
       <div className="mt-4 flex gap-2">
         <Button 
@@ -14,7 +14,7 @@ export default function WelcomeCard() {
           className="bg-white text-black hover:bg-gray-100"
           asChild
         >
-          <Link to="/dashboard">Ver Dashboard</Link>
+          <Link to="/login">Fazer login</Link>
         </Button>
       </div>
     </div>

@@ -1,9 +1,9 @@
 import type { RouteObject } from 'react-router-dom';
-import FinancialDashboard from '@/components/pages/Dashboard/FinancialDashboard';
+import RiskApp from '@/app/App';
 
 export const dashboardRoutes: RouteObject[] = [
   {
-    path: '/dashboard',
-    element: <FinancialDashboard />,
+    path: 'dashboard',
+    element: <RiskApp />,
   },
 ];

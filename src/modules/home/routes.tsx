@@ -3,11 +3,11 @@ import Home from './Home';
 
 export const homeRoutes: RouteObject[] = [
   {
-    path: '/',
+    path: '',
     element: <Home />,
   },
   {
-    path: '/home',
+    path: 'home',
     element: <Home />,
   },
 ];
