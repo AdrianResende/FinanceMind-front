@@ -31,7 +31,7 @@ export function Sidebar({ activeView, onNavigate, open, onClose }: SidebarProps)
       >
         <div className="flex items-center justify-between border-b border-slate-700 p-5">
           <div>
-            <h1 className="text-xl font-bold text-[#10B981]">AI Risk Advisor</h1>
+            <h1 className="text-xl font-bold text-[#10B981]">FinanceMind</h1>
             <p className="mt-1 text-xs uppercase tracking-[0.22em] text-slate-500">Risk control</p>
           </div>
 
@@ -69,7 +69,7 @@ export function Sidebar({ activeView, onNavigate, open, onClose }: SidebarProps)
         </nav>
 
         <div className="border-t border-slate-700 p-4">
-          <p className="text-sm text-[#9CA3AF]">© 2026 AI Risk Advisor</p>
+          <p className="text-sm text-[#9CA3AF]">© 2026 FinanceMind</p>
         </div>
       </aside>
     </>
