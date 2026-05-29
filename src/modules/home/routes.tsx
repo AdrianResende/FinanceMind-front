@@ -1,5 +1,6 @@
 import type { RouteObject } from 'react-router-dom';
 import Home from './Home';
+import DesignSystemDocs from './DesignSystemDocs';
 
 export const homeRoutes: RouteObject[] = [
   {
@@ -9,5 +10,9 @@ export const homeRoutes: RouteObject[] = [
   {
     path: 'home',
     element: <Home />,
+  },
+  {
+    path: 'design-system',
+    element: <DesignSystemDocs />,
   },
 ];

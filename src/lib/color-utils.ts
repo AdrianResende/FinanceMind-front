@@ -4,7 +4,8 @@
  * Provides conversion between different color formats including OKLCH and LAB
  */
 
-import { Color, parseColor } from "react-aria-components";
+import { parseColor } from "react-aria-components";
+import type { Color } from "react-aria-components";
 
 export type ColorFormat = "hex" | "rgb" | "hsl" | "hsv" | "oklch" | "lab";
 
