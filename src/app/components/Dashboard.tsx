@@ -5,6 +5,7 @@ import { RiskPill, SectionHeading, Surface } from '@/components/shared';
 
 interface DashboardProps {
   onNavigateToAnalysis: () => void;
+  variant?: 'default' | 'assets';
 }
 
 const ibovespaSeries = [
@@ -67,9 +68,10 @@ const suggestedTopics = [
   'Monte um plano de rebalanceamento',
 ];
 
-export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
+export function Dashboard({ onNavigateToAnalysis, variant = 'default' }: DashboardProps) {
   const [prompt, setPrompt] = useState('');
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const isAssetsVariant = variant === 'assets';
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -93,21 +95,31 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
 
   return (
     <section className="space-y-6">
-      <Surface className="p-6 sm:p-8">
-        <SectionHeading
-          kicker="Painel de mercado"
-          title="Painel estratégico do investidor"
-          description="Veja o comportamento recente do Ibovespa, os principais riscos do cenário atual e os ativos que merecem atenção no pregão."
-        />
+      <Surface className={isAssetsVariant ? 'border-[#d7dde5] bg-[#f7f9fb] p-6 shadow-[0_10px_24px_-14px_rgba(3,18,37,0.22)] sm:p-8' : 'p-6 sm:p-8'}>
+        {isAssetsVariant ? (
+          <header>
+            <p className="text-sm uppercase tracking-[0.2em] text-[#5f6671]">Painel de mercado</p>
+            <h2 className="fm-display mt-2 text-3xl font-bold text-[#191c1e] sm:text-4xl">Painel estratégico do investidor</h2>
+            <p className="mt-3 max-w-3xl text-sm leading-7 text-[#5f6671] sm:text-base">
+              Veja o comportamento recente do Ibovespa, os principais riscos do cenário atual e os ativos que merecem atenção no pregão.
+            </p>
+          </header>
+        ) : (
+          <SectionHeading
+            kicker="Painel de mercado"
+            title="Painel estratégico do investidor"
+            description="Veja o comportamento recente do Ibovespa, os principais riscos do cenário atual e os ativos que merecem atenção no pregão."
+          />
+        )}
       </Surface>
 
       <div className="grid gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
-        <Surface className="p-5 sm:p-6">
+        <Surface className={isAssetsVariant ? 'border-[#d7dde5] bg-white p-5 shadow-[0_10px_24px_-14px_rgba(3,18,37,0.22)] sm:p-6' : 'p-5 sm:p-6'}>
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="fm-shell-muted text-sm font-medium">Índice Bovespa - 6 meses</p>
+              <p className={isAssetsVariant ? 'text-sm font-medium text-[#5f6671]' : 'fm-shell-muted text-sm font-medium'}>Índice Bovespa - 6 meses</p>
               <div className="mt-2 flex items-center gap-2">
-                <span className="text-3xl font-bold text-white">+5.4%</span>
+                <span className={isAssetsVariant ? 'text-3xl font-bold text-[#191c1e]' : 'text-3xl font-bold text-white'}>+5.4%</span>
                 <RiskPill level="low" label="Tendência positiva" />
               </div>
             </div>
@@ -123,23 +135,28 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
                     <stop offset="100%" stopColor="#10B981" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid stroke="#374151" strokeDasharray="3 3" />
-                <XAxis dataKey="month" stroke="#9CA3AF" />
-                <YAxis stroke="#9CA3AF" domain={[0, 120000]} tickFormatter={(value) => String(value)} />
-                <Tooltip contentStyle={{ background: '#111827', border: '1px solid #374151' }} />
+                <CartesianGrid stroke={isAssetsVariant ? '#d7dde5' : '#374151'} strokeDasharray="3 3" />
+                <XAxis dataKey="month" stroke={isAssetsVariant ? '#5f6671' : '#9CA3AF'} />
+                <YAxis stroke={isAssetsVariant ? '#5f6671' : '#9CA3AF'} domain={[0, 120000]} tickFormatter={(value) => String(value)} />
+                <Tooltip
+                  contentStyle={{
+                    background: isAssetsVariant ? '#ffffff' : '#111827',
+                    border: `1px solid ${isAssetsVariant ? '#d7dde5' : '#374151'}`,
+                  }}
+                />
                 <Area type="monotone" dataKey="value" stroke="#10B981" fill="url(#ibovGradient)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </Surface>
 
-        <Surface className="p-5 sm:p-6">
-          <h3 className="text-xl font-semibold text-white">Resumo do mercado</h3>
+        <Surface className={isAssetsVariant ? 'border-[#d7dde5] bg-[#f7f9fb] p-5 shadow-[0_10px_24px_-14px_rgba(3,18,37,0.22)] sm:p-6' : 'p-5 sm:p-6'}>
+          <h3 className={isAssetsVariant ? 'text-xl font-semibold text-[#191c1e]' : 'text-xl font-semibold text-white'}>Resumo do mercado</h3>
 
           <div className="mt-6 space-y-6">
             <div>
               <p className="text-sm font-semibold text-emerald-400">Possíveis ganhos</p>
-              <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <ul className={isAssetsVariant ? 'mt-3 space-y-2 text-sm text-[#5f6671]' : 'mt-3 space-y-2 text-sm text-slate-300'}>
                 <li>• Dividendos atrativos</li>
                 <li>• Setor bancário estável</li>
                 <li>• Exportadoras em alta</li>
@@ -148,7 +165,7 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
 
             <div>
               <p className="text-sm font-semibold text-rose-400">Riscos</p>
-              <ul className="mt-3 space-y-2 text-sm text-slate-300">
+              <ul className={isAssetsVariant ? 'mt-3 space-y-2 text-sm text-[#5f6671]' : 'mt-3 space-y-2 text-sm text-slate-300'}>
                 <li>• Volatilidade global</li>
                 <li>• Cenário político incerto</li>
                 <li>• Inflação elevada</li>
@@ -202,52 +219,52 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
           </div>
         </Surface>
 
-        <Surface className="p-5">
-          <h3 className="text-lg font-semibold text-white">Ativos em destaque</h3>
+        <Surface className="p-5 bg-[#f7f9fb]">
+          <h3 className="text-lg font-semibold text-[#191c1e]">Ativos em destaque</h3>
           <div className="mt-4 space-y-3">
             {featuredAssets.map((asset) => (
-              <div key={asset.ticker} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4">
+              <div key={asset.ticker} className="rounded-xl border border-[#d7dde5] bg-white p-4">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-lg font-semibold text-white">{asset.ticker}</p>
-                    <p className="text-sm text-slate-400">{asset.risk}</p>
+                    <p className="text-lg font-semibold text-[#191c1e]">{asset.ticker}</p>
+                    <p className="text-sm text-[#44474d]">{asset.risk}</p>
                   </div>
                   <p className={`text-sm font-semibold ${asset.changeColor}`}>{asset.change}</p>
                 </div>
-                <p className="mt-3 text-xl font-bold text-white">{asset.price}</p>
+                <p className="mt-3 text-xl font-bold text-[#191c1e]">{asset.price}</p>
               </div>
             ))}
           </div>
 
-          <h4 className="mt-6 text-base font-semibold text-white">Leitura rápida</h4>
+          <h4 className="mt-6 text-base font-semibold text-[#191c1e]">Leitura rápida</h4>
           <p className="fm-shell-muted mt-3 text-sm leading-7">{stockOfTheDay.summary}</p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
-            <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Suporte</p>
-              <p className="mt-2 text-xl font-semibold text-white">{stockOfTheDay.support}</p>
+            <div className="rounded-xl border border-[#d7dde5] bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#75777e]">Suporte</p>
+              <p className="mt-2 text-xl font-semibold text-[#191c1e]">{stockOfTheDay.support}</p>
             </div>
-            <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Resistência</p>
-              <p className="mt-2 text-xl font-semibold text-white">{stockOfTheDay.resistance}</p>
+            <div className="rounded-xl border border-[#d7dde5] bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#75777e]">Resistência</p>
+              <p className="mt-2 text-xl font-semibold text-[#191c1e]">{stockOfTheDay.resistance}</p>
             </div>
           </div>
         </Surface>
       </div>
 
-      <Surface className="overflow-hidden p-0">
+      <Surface className="overflow-hidden p-0 bg-[#f7f9fb]">
         <div className="grid gap-0 lg:grid-cols-[1.4fr_0.9fr]">
-          <div className="border-b border-slate-800 p-5 sm:p-6 lg:border-b-0 lg:border-r">
+          <div className="border-b border-[#d7dde5] p-5 sm:p-6 lg:border-b-0 lg:border-r">
             <div className="flex flex-wrap items-start justify-between gap-4">
               <div>
                 <p className="fm-shell-muted text-sm uppercase tracking-[0.2em]">Assistente financeiro</p>
-                <h3 className="mt-2 text-2xl font-bold text-white">Painel e chat no mesmo fluxo</h3>
+                <h3 className="mt-2 text-2xl font-bold text-[#191c1e]">Painel e chat no mesmo fluxo</h3>
                 <p className="fm-shell-muted mt-2 max-w-2xl text-sm leading-7">
                   Use o assistente para transformar os dados do painel em próximos passos práticos sem sair da tela.
                 </p>
               </div>
 
-              <div className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-400">
+              <div className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-700">
                 Consulta inteligente
               </div>
             </div>
@@ -255,15 +272,15 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
             <div className="mt-6 space-y-4">
               {mentorMessages.map((item) => (
                 <div key={item.title} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                  <div className={`max-w-3xl rounded-2xl border p-4 ${item.role === 'user' ? 'border-slate-700 bg-slate-950/70' : 'border-emerald-500/20 bg-emerald-500/10'}`}>
-                    <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-slate-400">
+                  <div className={`max-w-3xl rounded-2xl border p-4 ${item.role === 'user' ? 'border-[#d7dde5] bg-white' : 'border-emerald-500/20 bg-emerald-500/10'}`}>
+                    <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-[#75777e]">
                       {item.role === 'assistant' ? <Sparkles size={14} className="text-emerald-400" /> : null}
                       <span>{item.label}</span>
-                      <span className="text-slate-600">•</span>
+                      <span className="text-[#c7cdd6]">•</span>
                       <span>{item.time}</span>
                     </div>
-                    <p className="mt-3 text-sm font-semibold text-white">{item.title}</p>
-                    <p className="mt-2 text-sm leading-7 text-slate-300">{item.message}</p>
+                    <p className="mt-3 text-sm font-semibold text-[#191c1e]">{item.title}</p>
+                    <p className="mt-2 text-sm leading-7 text-[#44474d]">{item.message}</p>
                   </div>
                 </div>
               ))}
@@ -275,14 +292,14 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
                   key={topic}
                   type="button"
                   onClick={() => applySuggestion(topic)}
-                  className="rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1.5 text-sm text-slate-300 transition hover:border-emerald-500/40 hover:text-white"
+                  className="rounded-full border border-[#d7dde5] bg-white px-3 py-1.5 text-sm text-[#44474d] transition hover:border-emerald-500/40 hover:text-[#191c1e]"
                 >
                   {topic}
                 </button>
               ))}
             </div>
 
-            <div className="mt-6 rounded-2xl border border-slate-700 bg-slate-950/60 p-3">
+            <div className="mt-6 rounded-2xl border border-[#d7dde5] bg-white p-3">
               <div className="flex items-end gap-3">
                 <textarea
                   ref={textareaRef}
@@ -290,14 +307,14 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
                   rows={1}
                   onChange={(event) => setPrompt(event.target.value)}
                   placeholder="Pergunte ao mentor sobre risco, rebalanceamento ou FIIs..."
-                  className="max-h-32 min-h-[44px] w-full resize-none bg-transparent px-2 py-2 text-sm text-white outline-none placeholder:text-slate-500"
+                  className="max-h-32 min-h-[44px] w-full resize-none bg-transparent px-2 py-2 text-sm text-[#191c1e] outline-none placeholder:text-[#8a9099]"
                 />
 
                 <button
                   type="button"
                   onClick={handleSend}
                   disabled={!canSend}
-                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-slate-950 transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-white transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
                   aria-label="Enviar mensagem"
                 >
                   <Send size={16} />
@@ -307,35 +324,35 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
           </div>
 
           <div className="space-y-4 p-5 sm:p-6">
-            <div className="rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Impacto esperado</p>
+            <div className="rounded-2xl border border-[#d7dde5] bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#75777e]">Impacto esperado</p>
               <div className="mt-4 space-y-4">
                 <div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300">Risco atual</span>
-                    <span className="font-semibold text-rose-400">Alto</span>
+                    <span className="text-[#44474d]">Risco atual</span>
+                    <span className="font-semibold text-rose-600">Alto</span>
                   </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8edf2]">
                     <div className="h-full bg-rose-500" style={{ width: '75%' }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex items-center justify-between text-sm">
-                    <span className="text-slate-300">Risco proposto</span>
-                    <span className="font-semibold text-emerald-400">Moderado</span>
+                    <span className="text-[#44474d]">Risco proposto</span>
+                    <span className="font-semibold text-emerald-700">Moderado</span>
                   </div>
-                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-[#e8edf2]">
                     <div className="h-full bg-emerald-500" style={{ width: '45%' }} />
                   </div>
                 </div>
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
-              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Próximo passo sugerido</p>
-              <h4 className="mt-3 text-lg font-semibold text-white">Rebalancear sem perder renda</h4>
-              <p className="mt-2 text-sm leading-7 text-slate-300">
+            <div className="rounded-2xl border border-[#d7dde5] bg-white p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-[#75777e]">Próximo passo sugerido</p>
+              <h4 className="mt-3 text-lg font-semibold text-[#191c1e]">Rebalancear sem perder renda</h4>
+              <p className="mt-2 text-sm leading-7 text-[#44474d]">
                 Combine uma redução gradual em ativos mais voláteis com entrada em FIIs e caixa para manter flexibilidade.
               </p>
 

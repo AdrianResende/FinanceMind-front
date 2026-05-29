@@ -60,7 +60,7 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Ex: PETR4, Tesla, tecnologia..."
-            className="h-11 w-full rounded-lg border border-slate-600 bg-slate-900 pl-10 pr-3 text-white outline-none transition focus:border-[#10B981]"
+            className="h-11 w-full rounded-lg border border-[#d7dde5] bg-white pl-10 pr-3 text-[#191c1e] outline-none transition placeholder:text-[#8a9099] focus:border-[#10B981]"
           />
         </div>
       </Surface>
@@ -72,13 +72,13 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
             onClick={() => onSelect(asset.ticker)}
             className={`flex flex-col gap-4 rounded-2xl border p-4 text-left transition sm:flex-row sm:items-center sm:justify-between ${
               selectedTicker === asset.ticker
-                ? 'border-[#10B981] bg-[#10B981]/10 shadow-lg shadow-emerald-500/5'
-                : 'border-slate-800 bg-[#111827] hover:border-slate-500'
+                ? 'border-[#10B981] bg-[#ecfdf5] shadow-lg shadow-emerald-500/5'
+                : 'border-white bg-[#f7f9fb] hover:border-[#dfe6ee]'
             }`}
           >
             <div>
-              <p className="font-semibold text-white">{asset.ticker}</p>
-              <p className="text-sm text-slate-300">{asset.name}</p>
+              <p className="font-semibold text-[#191c1e]">{asset.ticker}</p>
+              <p className="text-sm text-[#44474d]">{asset.name}</p>
               <p className="fm-shell-muted mt-1 text-xs">{asset.sector}</p>
             </div>
 
@@ -91,7 +91,7 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
       </div>
 
       {filteredAssets.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-slate-700 bg-[#111827] p-10 text-center text-slate-400">
+        <div className="rounded-2xl border border-dashed border-[#d7dde5] bg-[#f7f9fb] p-10 text-center text-[#75777e]">
           Nenhum ativo encontrado para essa busca.
         </div>
       ) : null}

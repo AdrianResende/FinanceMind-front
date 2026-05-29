@@ -12,7 +12,7 @@ const menuItems = [
   { id: 'analisar', label: 'Analisar Ativo', icon: TrendingUp, to: '/dashboard?view=analisar' },
   { id: 'carteira', label: 'Carteira', icon: Briefcase, to: '/dashboard?view=carteira' },
   { id: 'ativos', label: 'Ativos', icon: ChartColumn, to: '/dashboard?view=ativos' },
-  { id: 'aprendizado', label: 'Aprendizado', icon: GraduationCap, to: '/chat-ia' },
+  { id: 'aprendizado', label: 'Aprendizado', icon: GraduationCap, to: '/dashboard?view=aprendizado' },
   { id: 'chat-ia', label: 'Chat IA', icon: Sparkles, to: '/chat-ia' },
   { id: 'configuracoes', label: 'Configurações', icon: Cog, to: '/configuracoes' },
   { id: 'alertas', label: 'Alertas', icon: Bell, to: '/dashboard?view=alertas' },
@@ -22,6 +22,7 @@ export function Sidebar({ open, onClose }: SidebarProps) {
   const location = useLocation();
 
   const activeHref = useMemo(() => `${location.pathname}${location.search}`, [location.pathname, location.search]);
+  const activePath = location.pathname;
 
   return (
     <>
@@ -57,7 +58,8 @@ export function Sidebar({ open, onClose }: SidebarProps) {
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
-              const isActive = activeHref === item.to;
+              const itemUrl = new URL(item.to, 'https://financemind.local');
+              const isActive = itemUrl.search ? activeHref === item.to : activePath === itemUrl.pathname;
               return (
                 <li key={item.id}>
                   <Link

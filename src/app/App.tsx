@@ -4,6 +4,15 @@ import { AssetSelector } from './components/AssetSelector';
 import { Dashboard } from './components/Dashboard';
 import { RiskAnalysis } from './components/RiskAnalysis';
 
+function FeaturePlaceholder({ title, description }: { title: string; description: string }) {
+  return (
+    <div className="rounded-2xl border border-[#d7dde5] bg-[#f7f9fb] py-20 text-center shadow-[0_10px_24px_-14px_rgba(3,18,37,0.22)]">
+      <h2 className="mb-4 text-2xl font-bold text-[#191c1e]">{title}</h2>
+      <p className="mx-auto max-w-2xl text-sm text-[#5f6671]">{description}</p>
+    </div>
+  );
+}
+
 export default function RiskApp() {
   const location = useLocation();
   const [activeView, setActiveView] = useState<string>('dashboard');
@@ -29,19 +38,22 @@ export default function RiskApp() {
         return <Dashboard onNavigateToAnalysis={() => setActiveView('analisar')} />;
       case 'analisar':
         return <AssetSelector onSelect={handleSelectAsset} selectedTicker={selectedTicker || undefined} />;
+      case 'ativos':
+        return <Dashboard onNavigateToAnalysis={() => setActiveView('analisar')} variant="assets" />;
+      case 'aprendizado':
+        return (
+          <FeaturePlaceholder
+            title="Centro de aprendizado"
+            description="Explore trilhas guiadas de educacao financeira, fundamentos de risco e leitura de mercado sem misturar esta area com o Chat IA."
+          />
+        );
       case 'carteira':
         return (
-          <div className="fm-surface-soft py-20 text-center">
-            <h2 className="mb-4 text-2xl font-bold text-white">Carteira</h2>
-            <p className="fm-shell-muted">Funcionalidade em desenvolvimento</p>
-          </div>
+          <FeaturePlaceholder title="Carteira" description="Funcionalidade em desenvolvimento" />
         );
       case 'alertas':
         return (
-          <div className="fm-surface-soft py-20 text-center">
-            <h2 className="mb-4 text-2xl font-bold text-white">Alertas</h2>
-            <p className="fm-shell-muted">Funcionalidade em desenvolvimento</p>
-          </div>
+          <FeaturePlaceholder title="Alertas" description="Funcionalidade em desenvolvimento" />
         );
       default:
         return <Dashboard onNavigateToAnalysis={() => setActiveView('analisar')} />;
