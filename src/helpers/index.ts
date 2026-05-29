@@ -1,3 +1,4 @@
 export * from './formatters';
 export * from './validators';
-export { useMockAuth } from './useMockAuth';
+// Hook movido para src/hooks/ — re-exportado aqui para compatibilidade
+export { useMockAuth } from '@/hooks/useMockAuth';
