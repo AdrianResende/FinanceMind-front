@@ -1,7 +1,9 @@
 import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { useUIStore } from '@/stores';
 
 export default function WelcomeCard() {
+  const { openLoginModal } = useUIStore();
+
   return (
     <div className="rounded-lg border bg-gradient-to-br from-black to-gray-800 p-6 shadow-sm text-white">
       <h2 className="text-xl font-semibold">👋 Bem-vindo!</h2>
@@ -9,12 +11,12 @@ export default function WelcomeCard() {
         Comece com a visão geral e entre para liberar simulações e explicações completas.
       </p>
       <div className="mt-4 flex gap-2">
-        <Button 
-          size="sm" 
+        <Button
+          size="sm"
           className="bg-white text-black hover:bg-gray-100"
-          asChild
+          onClick={openLoginModal}
         >
-          <Link to="/login">Fazer login</Link>
+          Fazer login
         </Button>
       </div>
     </div>

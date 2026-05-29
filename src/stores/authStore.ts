@@ -1,7 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 
-export interface User {
+// AuthUser é o subconjunto necessário em runtime (sessão client-side).
+// O tipo completo User (com createdAt/updatedAt) fica em @/types/common.
+export interface AuthUser {
   id: string;
   name: string;
   email: string;
@@ -9,11 +11,15 @@ export interface User {
   role?: 'admin' | 'user';
 }
 
+// Mantido para compatibilidade com importações existentes de @/stores/authStore.
+/** @deprecated Use AuthUser. O alias será removido futuramente. */
+export type User = AuthUser;
+
 interface AuthState {
-  user: User | null;
+  user: AuthUser | null;
   token: string | null;
   isAuthenticated: boolean;
-  login: (user: User, token: string) => void;
+  login: (user: AuthUser, token: string) => void;
   logout: () => void;
 }
 
@@ -23,7 +29,7 @@ const useAuthStore = create<AuthState>()(
       user: null,
       token: null,
       isAuthenticated: false,
-      login: (user: User, token: string) => set({ user, token, isAuthenticated: true }),
+      login: (user: AuthUser, token: string) => set({ user, token, isAuthenticated: true }),
       logout: () => set({ user: null, token: null, isAuthenticated: false }),
     }),
     {
