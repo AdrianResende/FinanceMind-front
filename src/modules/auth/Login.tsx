@@ -73,9 +73,9 @@ export default function Login() {
     <div className="mx-auto flex min-h-[calc(100vh-8rem)] w-full max-w-6xl items-center px-4 py-10 sm:px-6 lg:px-8">
       <div className="grid w-full gap-8 lg:grid-cols-2">
         <section className="rounded-2xl border border-gray-200 bg-white p-8 shadow-card">
-          <h1 className="text-3xl font-bold text-gray-900">Entrar na plataforma</h1>
+          <h1 className="fm-display text-3xl font-bold text-gray-900">Entrar na plataforma</h1>
           <p className="mt-3 text-gray-600">
-            Faça login para desbloquear o simulador e as explicações detalhadas de cada tema financeiro.
+            Faça login para liberar o simulador e as explicações detalhadas de cada tema financeiro.
           </p>
 
           <form className="mt-8 space-y-4" onSubmit={handleSubmit}>
@@ -113,11 +113,11 @@ export default function Login() {
               </div>
             ) : null}
 
-            <Button type="submit" disabled={isSubmitting} className="h-11 w-full bg-brand-teal-600 hover:bg-brand-teal-700 disabled:opacity-70">
+            <Button type="submit" variant="brand" disabled={isSubmitting} className="h-11 w-full disabled:opacity-70">
               {isSubmitting ? 'Entrando...' : 'Entrar e liberar conteúdo'}
             </Button>
 
-            <Button type="button" variant="outline" onClick={loginInDemoMode} className="h-11 w-full">
+            <Button type="button" variant="brandOutline" onClick={loginInDemoMode} className="h-11 w-full">
               Entrar sem backend por enquanto
             </Button>
           </form>
@@ -138,7 +138,7 @@ export default function Login() {
             Quer conhecer antes de entrar? Volte para a visão pública e veja como a plataforma funciona.
             <div className="mt-3">
               <Link to="/" className="font-semibold text-white underline underline-offset-4">
-                Ver dashboard pública
+                Ver página pública
               </Link>
             </div>
           </div>
