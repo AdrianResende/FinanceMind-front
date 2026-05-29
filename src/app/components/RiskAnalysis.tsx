@@ -12,6 +12,7 @@ import {
   BarChart,
   Bar,
 } from 'recharts';
+import { RiskPill, Surface } from '@/components/shared';
 
 interface RiskAnalysisProps {
   ticker: string;
@@ -237,76 +238,70 @@ const mockData: Record<string, AssetRiskData> = {
   },
 };
 
-const riskStyle: Record<RiskLevel, { text: string; bg: string; border: string }> = {
-  Baixo: { text: '#10B981', bg: 'rgba(16, 185, 129, 0.16)', border: '#10B981' },
-  Médio: { text: '#F59E0B', bg: 'rgba(245, 158, 11, 0.16)', border: '#F59E0B' },
-  Alto: { text: '#EF4444', bg: 'rgba(239, 68, 68, 0.16)', border: '#EF4444' },
+const riskToPillLevel: Record<RiskLevel, 'low' | 'medium' | 'high'> = {
+  Baixo: 'low',
+  Médio: 'medium',
+  Alto: 'high',
 };
 
 export function RiskAnalysis({ ticker, onBack }: RiskAnalysisProps) {
   const asset = mockData[ticker] ?? mockData.PETR4;
-  const style = riskStyle[asset.riskLevel];
 
   return (
     <section className="space-y-6">
       <button
         onClick={onBack}
-        className="inline-flex items-center gap-2 rounded-lg border border-slate-700 bg-[#111827] px-4 py-2 text-sm font-medium text-white transition hover:border-slate-500"
+        className="fm-btn-outline gap-2"
       >
         <ArrowLeft size={16} />
-        Voltar para seleção
+        Voltar para selecao
       </button>
 
-      <header className="rounded-2xl border border-slate-800 bg-[#111827] p-6 shadow-2xl shadow-black/20 sm:p-8">
+      <Surface className="p-6 sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 className="text-3xl font-bold text-white sm:text-4xl">{asset.ticker}</h2>
-            <p className="mt-1 text-[#D1D5DB]">{asset.name} • {asset.sector}</p>
+            <p className="mt-1 text-slate-300">{asset.name} • {asset.sector}</p>
           </div>
-          <span
-            className="rounded-full border px-3 py-1 text-sm font-semibold"
-            style={{ color: style.text, borderColor: style.border, background: style.bg }}
-          >
-            Risco {asset.riskLevel}
-          </span>
+          <RiskPill level={riskToPillLevel[asset.riskLevel]} label={`Risco ${asset.riskLevel}`} className="text-sm" />
         </div>
-      </header>
+      </Surface>
 
       <div className="grid gap-4 md:grid-cols-2 2xl:grid-cols-4">
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-4 shadow-xl shadow-black/10">
-          <div className="mb-2 flex items-center gap-2 text-[#9CA3AF]">
+        <Surface className="p-4">
+          <div className="fm-shell-muted mb-2 flex items-center gap-2">
             <Gauge size={16} />
             Score de Risco
           </div>
           <p className="text-3xl font-bold text-white">{asset.score}</p>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-4 shadow-xl shadow-black/10">
-          <div className="mb-2 flex items-center gap-2 text-[#9CA3AF]">
+        <Surface className="p-4">
+          <div className="fm-shell-muted mb-2 flex items-center gap-2">
             <TriangleAlert size={16} />
             Volatilidade
           </div>
           <p className="text-3xl font-bold text-white">{asset.volatility.toFixed(1)}%</p>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-4 shadow-xl shadow-black/10">
-          <div className="mb-2 flex items-center gap-2 text-[#9CA3AF]">
+        <Surface className="p-4">
+          <div className="fm-shell-muted mb-2 flex items-center gap-2">
             <Shield size={16} />
             Beta
           </div>
           <p className="text-3xl font-bold text-white">{asset.beta.toFixed(2)}</p>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-4 shadow-xl shadow-black/10">
-          <p className="mb-2 text-[#9CA3AF]">Drawdown Máximo</p>
+        <Surface className="p-4">
+          <p className="fm-shell-muted mb-2">Drawdown Maximo</p>
           <p className="text-3xl font-bold text-white">{asset.maxDrawdown.toFixed(1)}%</p>
-          <p className="mt-1 text-xs text-[#9CA3AF]">CVaR 95%: {asset.cvar95.toFixed(1)}%</p>
-        </article>
+          <p className="fm-shell-muted mt-1 text-xs">CVaR 95%: {asset.cvar95.toFixed(1)}%</p>
+        </Surface>
       </div>
 
       <div className="grid gap-4 2xl:grid-cols-2">
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10">
-          <h3 className="mb-4 text-lg font-semibold text-white">Evolução do risco (6 meses)</h3>
+        <Surface className="p-5">
+          <h3 className="mb-4 text-lg font-semibold text-white">Evolucao do risco (6 meses)</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={asset.monthlyTrend}>
@@ -318,10 +313,10 @@ export function RiskAnalysis({ ticker, onBack }: RiskAnalysisProps) {
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10">
-          <h3 className="mb-4 text-lg font-semibold text-white">Preço médio no período</h3>
+        <Surface className="p-5">
+          <h3 className="mb-4 text-lg font-semibold text-white">Preco medio no periodo</h3>
           <div className="h-72">
             <ResponsiveContainer width="100%" height="100%">
               <AreaChart data={asset.monthlyTrend}>
@@ -333,11 +328,11 @@ export function RiskAnalysis({ ticker, onBack }: RiskAnalysisProps) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </article>
+        </Surface>
       </div>
 
-      <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10">
-        <h3 className="mb-4 text-lg font-semibold text-white">Composição dos fatores de risco</h3>
+      <Surface className="p-5">
+        <h3 className="mb-4 text-lg font-semibold text-white">Composicao dos fatores de risco</h3>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={asset.riskBreakdown}>
@@ -349,7 +344,7 @@ export function RiskAnalysis({ ticker, onBack }: RiskAnalysisProps) {
             </BarChart>
           </ResponsiveContainer>
         </div>
-      </article>
+      </Surface>
     </section>
   );
 }

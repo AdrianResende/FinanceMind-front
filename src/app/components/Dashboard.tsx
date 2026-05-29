@@ -1,5 +1,7 @@
-import { ArrowRight, CandlestickChart, TrendingUp } from 'lucide-react';
+import { useEffect, useRef, useState } from 'react';
+import { ArrowRight, CandlestickChart, Send, Sparkles, TrendingUp } from 'lucide-react';
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts';
+import { RiskPill, SectionHeading, Surface } from '@/components/shared';
 
 interface DashboardProps {
   onNavigateToAnalysis: () => void;
@@ -40,27 +42,73 @@ const stockOfTheDay = {
   ],
 };
 
+const mentorMessages = [
+  {
+    role: 'assistant',
+    label: 'Assistente',
+    time: 'Agora',
+    title: 'Resumo da carteira',
+    message:
+      'A carteira segue com viés positivo, mas a concentração em tecnologia ainda pede ajuste. Posso sugerir uma redistribuição entre renda variável, FIIs e caixa estratégico.',
+  },
+  {
+    role: 'user',
+    label: 'Você',
+    time: 'Há 2 min',
+    title: 'Quero reduzir risco',
+    message: 'Quais ativos devo revisar primeiro para sair de uma exposição mais agressiva?',
+  },
+];
+
+const suggestedTopics = [
+  'Como reduzir risco agora?',
+  'Quais FIIs fazem sentido?',
+  'Onde está a concentração da carteira?',
+  'Monte um plano de rebalanceamento',
+];
+
 export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
+  const [prompt, setPrompt] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+
+  useEffect(() => {
+    const textarea = textareaRef.current;
+    if (!textarea) return;
+
+    textarea.style.height = 'auto';
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [prompt]);
+
+  const canSend = prompt.trim().length > 0;
+
+  const applySuggestion = (text: string) => {
+    setPrompt(text);
+    textareaRef.current?.focus();
+  };
+
+  const handleSend = () => {
+    if (!canSend) return;
+    setPrompt('');
+  };
+
   return (
     <section className="space-y-6">
-      <header className="rounded-2xl border border-slate-800 bg-[#111827] p-6 shadow-2xl shadow-black/20 sm:p-8">
-        <p className="text-sm uppercase tracking-wider text-[#9CA3AF]">Painel de mercado</p>
-        <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl">Dashboard estratégico do investidor</h2>
-        <p className="mt-3 max-w-3xl text-sm leading-7 text-[#D1D5DB] sm:text-base">
-          Veja o comportamento recente do Ibovespa, os principais riscos do cenário atual e os ativos que merecem atenção no pregão.
-        </p>
-      </header>
+      <Surface className="p-6 sm:p-8">
+        <SectionHeading
+          kicker="Painel de mercado"
+          title="Painel estratégico do investidor"
+          description="Veja o comportamento recente do Ibovespa, os principais riscos do cenário atual e os ativos que merecem atenção no pregão."
+        />
+      </Surface>
 
       <div className="grid gap-4 2xl:grid-cols-[1.2fr_0.8fr]">
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10 sm:p-6">
+        <Surface className="p-5 sm:p-6">
           <div className="flex items-start justify-between gap-3">
             <div>
-              <p className="text-sm font-medium text-slate-400">Índice Bovespa - 6 meses</p>
+              <p className="fm-shell-muted text-sm font-medium">Índice Bovespa - 6 meses</p>
               <div className="mt-2 flex items-center gap-2">
                 <span className="text-3xl font-bold text-white">+5.4%</span>
-                <span className="rounded-full bg-emerald-500/10 px-2 py-1 text-xs font-semibold text-emerald-400">
-                  Tendência positiva
-                </span>
+                <RiskPill level="low" label="Tendência positiva" />
               </div>
             </div>
             <TrendingUp size={20} className="text-emerald-400" />
@@ -83,14 +131,14 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10 sm:p-6">
-          <h3 className="text-xl font-semibold text-white">Resumo do Mercado</h3>
+        <Surface className="p-5 sm:p-6">
+          <h3 className="text-xl font-semibold text-white">Resumo do mercado</h3>
 
           <div className="mt-6 space-y-6">
             <div>
-              <p className="text-sm font-semibold text-emerald-400">Possíveis Ganhos</p>
+              <p className="text-sm font-semibold text-emerald-400">Possíveis ganhos</p>
               <ul className="mt-3 space-y-2 text-sm text-slate-300">
                 <li>• Dividendos atrativos</li>
                 <li>• Setor bancário estável</li>
@@ -110,24 +158,24 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
 
           <button
             onClick={onNavigateToAnalysis}
-            className="mt-8 inline-flex items-center gap-2 rounded-lg bg-[#10B981] px-4 py-2 font-semibold text-white transition hover:brightness-110"
+            className="fm-btn-primary mt-8 gap-2"
           >
-            Analisar Ativo
+            Analisar ativo
             <ArrowRight size={16} />
           </button>
-        </article>
+        </Surface>
       </div>
 
       <div className="grid gap-4 2xl:grid-cols-[1.15fr_0.85fr]">
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10">
+        <Surface className="p-5">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <div className="flex items-center gap-2 text-sm text-[#9CA3AF]">
+              <div className="fm-shell-muted flex items-center gap-2 text-sm">
                 <CandlestickChart size={16} />
                 Ação do dia
               </div>
               <h3 className="mt-2 text-2xl font-bold text-white">{stockOfTheDay.ticker}</h3>
-              <p className="text-sm text-[#D1D5DB]">{stockOfTheDay.company}</p>
+              <p className="fm-shell-muted text-sm">{stockOfTheDay.company}</p>
             </div>
 
             <div className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-400">
@@ -152,10 +200,10 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
               </AreaChart>
             </ResponsiveContainer>
           </div>
-        </article>
+        </Surface>
 
-        <article className="rounded-2xl border border-slate-800 bg-[#111827] p-5 shadow-xl shadow-black/10">
-          <h3 className="text-lg font-semibold text-white">Ativos em Destaque</h3>
+        <Surface className="p-5">
+          <h3 className="text-lg font-semibold text-white">Ativos em destaque</h3>
           <div className="mt-4 space-y-3">
             {featuredAssets.map((asset) => (
               <div key={asset.ticker} className="rounded-xl border border-slate-700 bg-slate-900/60 p-4">
@@ -172,7 +220,7 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
           </div>
 
           <h4 className="mt-6 text-base font-semibold text-white">Leitura rápida</h4>
-          <p className="mt-3 text-sm leading-7 text-[#9CA3AF]">{stockOfTheDay.summary}</p>
+          <p className="fm-shell-muted mt-3 text-sm leading-7">{stockOfTheDay.summary}</p>
 
           <div className="mt-6 grid gap-3 sm:grid-cols-2">
             <div className="rounded-xl border border-slate-700 bg-slate-900/60 p-4">
@@ -184,8 +232,121 @@ export function Dashboard({ onNavigateToAnalysis }: DashboardProps) {
               <p className="mt-2 text-xl font-semibold text-white">{stockOfTheDay.resistance}</p>
             </div>
           </div>
-        </article>
+        </Surface>
       </div>
+
+      <Surface className="overflow-hidden p-0">
+        <div className="grid gap-0 lg:grid-cols-[1.4fr_0.9fr]">
+          <div className="border-b border-slate-800 p-5 sm:p-6 lg:border-b-0 lg:border-r">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <div>
+                <p className="fm-shell-muted text-sm uppercase tracking-[0.2em]">Assistente financeiro</p>
+                <h3 className="mt-2 text-2xl font-bold text-white">Painel e chat no mesmo fluxo</h3>
+                <p className="fm-shell-muted mt-2 max-w-2xl text-sm leading-7">
+                  Use o assistente para transformar os dados do painel em próximos passos práticos sem sair da tela.
+                </p>
+              </div>
+
+              <div className="rounded-full border border-emerald-500/30 bg-emerald-500/10 px-3 py-1 text-sm font-semibold text-emerald-400">
+                Consulta inteligente
+              </div>
+            </div>
+
+            <div className="mt-6 space-y-4">
+              {mentorMessages.map((item) => (
+                <div key={item.title} className={`flex ${item.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                  <div className={`max-w-3xl rounded-2xl border p-4 ${item.role === 'user' ? 'border-slate-700 bg-slate-950/70' : 'border-emerald-500/20 bg-emerald-500/10'}`}>
+                    <div className="flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-slate-400">
+                      {item.role === 'assistant' ? <Sparkles size={14} className="text-emerald-400" /> : null}
+                      <span>{item.label}</span>
+                      <span className="text-slate-600">•</span>
+                      <span>{item.time}</span>
+                    </div>
+                    <p className="mt-3 text-sm font-semibold text-white">{item.title}</p>
+                    <p className="mt-2 text-sm leading-7 text-slate-300">{item.message}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 flex flex-wrap gap-2">
+              {suggestedTopics.map((topic) => (
+                <button
+                  key={topic}
+                  type="button"
+                  onClick={() => applySuggestion(topic)}
+                  className="rounded-full border border-slate-700 bg-slate-900/60 px-3 py-1.5 text-sm text-slate-300 transition hover:border-emerald-500/40 hover:text-white"
+                >
+                  {topic}
+                </button>
+              ))}
+            </div>
+
+            <div className="mt-6 rounded-2xl border border-slate-700 bg-slate-950/60 p-3">
+              <div className="flex items-end gap-3">
+                <textarea
+                  ref={textareaRef}
+                  value={prompt}
+                  rows={1}
+                  onChange={(event) => setPrompt(event.target.value)}
+                  placeholder="Pergunte ao mentor sobre risco, rebalanceamento ou FIIs..."
+                  className="max-h-32 min-h-[44px] w-full resize-none bg-transparent px-2 py-2 text-sm text-white outline-none placeholder:text-slate-500"
+                />
+
+                <button
+                  type="button"
+                  onClick={handleSend}
+                  disabled={!canSend}
+                  className="flex h-11 w-11 items-center justify-center rounded-xl bg-emerald-500 text-slate-950 transition hover:scale-105 disabled:cursor-not-allowed disabled:opacity-40"
+                  aria-label="Enviar mensagem"
+                >
+                  <Send size={16} />
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div className="space-y-4 p-5 sm:p-6">
+            <div className="rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Impacto esperado</p>
+              <div className="mt-4 space-y-4">
+                <div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-300">Risco atual</span>
+                    <span className="font-semibold text-rose-400">Alto</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                    <div className="h-full bg-rose-500" style={{ width: '75%' }} />
+                  </div>
+                </div>
+
+                <div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span className="text-slate-300">Risco proposto</span>
+                    <span className="font-semibold text-emerald-400">Moderado</span>
+                  </div>
+                  <div className="mt-2 h-1.5 overflow-hidden rounded-full bg-slate-800">
+                    <div className="h-full bg-emerald-500" style={{ width: '45%' }} />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div className="rounded-2xl border border-slate-700 bg-slate-950/60 p-4">
+              <p className="text-xs uppercase tracking-[0.2em] text-slate-500">Próximo passo sugerido</p>
+              <h4 className="mt-3 text-lg font-semibold text-white">Rebalancear sem perder renda</h4>
+              <p className="mt-2 text-sm leading-7 text-slate-300">
+                Combine uma redução gradual em ativos mais voláteis com entrada em FIIs e caixa para manter flexibilidade.
+              </p>
+
+              <button type="button" className="fm-btn-primary mt-5 gap-2">
+                Abrir análise detalhada
+                <ArrowRight size={16} />
+              </button>
+            </div>
+          </div>
+        </div>
+      </Surface>
     </section>
   );
 }
