@@ -1,5 +1,6 @@
 import { Search, TrendingUp } from 'lucide-react';
 import { useMemo, useState } from 'react';
+import { RiskPill, Surface } from '@/components/shared';
 
 interface AssetSelectorProps {
   onSelect: (ticker: string) => void;
@@ -24,11 +25,11 @@ const assets: AssetItem[] = [
   { ticker: 'BTC', name: 'Bitcoin', sector: 'Cripto', risk: 'Alto' },
 ];
 
-const riskBadge = {
-  Baixo: 'bg-[#10B981]/20 text-[#10B981]',
-  Médio: 'bg-[#F59E0B]/20 text-[#F59E0B]',
-  Alto: 'bg-[#EF4444]/20 text-[#EF4444]',
-};
+const riskToPillLevel = {
+  Baixo: 'low',
+  Médio: 'medium',
+  Alto: 'high',
+} as const;
 
 export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) {
   const [query, setQuery] = useState('');
@@ -49,12 +50,12 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
 
   return (
     <section className="space-y-6">
-      <header className="rounded-2xl border border-slate-800 bg-[#111827] p-6 shadow-2xl shadow-black/20 sm:p-8">
+      <Surface className="p-6 sm:p-8">
         <h2 className="text-2xl font-bold text-white sm:text-3xl">Selecionar ativo</h2>
-        <p className="mt-2 text-sm leading-7 text-[#9CA3AF] sm:text-base">Busque por ticker, nome da empresa ou setor para iniciar a análise.</p>
+        <p className="fm-shell-muted mt-2 text-sm leading-7 sm:text-base">Busque por ticker, nome da empresa ou setor para iniciar a analise.</p>
 
         <div className="relative mt-5">
-          <Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-[#9CA3AF]" size={18} />
+          <Search className="fm-shell-muted pointer-events-none absolute left-3 top-1/2 -translate-y-1/2" size={18} />
           <input
             value={query}
             onChange={(event) => setQuery(event.target.value)}
@@ -62,7 +63,7 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
             className="h-11 w-full rounded-lg border border-slate-600 bg-slate-900 pl-10 pr-3 text-white outline-none transition focus:border-[#10B981]"
           />
         </div>
-      </header>
+      </Surface>
 
       <div className="grid gap-3 xl:grid-cols-2">
         {filteredAssets.map((asset) => (
@@ -77,15 +78,13 @@ export function AssetSelector({ onSelect, selectedTicker }: AssetSelectorProps) 
           >
             <div>
               <p className="font-semibold text-white">{asset.ticker}</p>
-              <p className="text-sm text-[#D1D5DB]">{asset.name}</p>
-              <p className="mt-1 text-xs text-[#9CA3AF]">{asset.sector}</p>
+              <p className="text-sm text-slate-300">{asset.name}</p>
+              <p className="fm-shell-muted mt-1 text-xs">{asset.sector}</p>
             </div>
 
             <div className="flex items-center gap-3">
-              <span className={`rounded-full px-3 py-1 text-xs font-semibold ${riskBadge[asset.risk]}`}>
-                {asset.risk}
-              </span>
-              <TrendingUp size={18} className="text-[#9CA3AF]" />
+              <RiskPill level={riskToPillLevel[asset.risk]} label={asset.risk} />
+              <TrendingUp size={18} className="fm-shell-muted" />
             </div>
           </button>
         ))}

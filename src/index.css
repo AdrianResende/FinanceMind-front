@@ -13,7 +13,7 @@
     margin: 0;
     min-width: 320px;
     min-height: 100vh;
-    font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+    font-family: var(--fm-font-body, system-ui, Avenir, Helvetica, Arial, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -82,8 +82,108 @@
   --hu-input: 0, 0%, 100%;
   --hu-ring: 0, 0%, 71%;
 
+  --fm-font-display: "Sora", "Segoe UI", sans-serif;
+  --fm-font-body: "Manrope", "Segoe UI", sans-serif;
+
+  --fm-bg-light: #edf1f3;
+  --fm-bg-soft: #f7f9fb;
+  --fm-ink-strong: #061225;
+  --fm-ink: #0d1726;
+  --fm-ink-muted: #5a657a;
+
+  --fm-shell-bg: #0b1220;
+  --fm-shell-surface: #111827;
+  --fm-shell-surface-soft: #1f2937;
+  --fm-shell-border: #334155;
+  --fm-shell-muted: #9ca3af;
+  --fm-shell-text: #f8fafc;
+
+  --fm-accent: #10b981;
+  --fm-warning: #f59e0b;
+  --fm-danger: #ef4444;
+
+  --fm-shadow-card: 0 16px 30px -12px rgba(2, 16, 36, 0.35);
+  --fm-shadow-soft: 0 10px 24px -14px rgba(3, 18, 37, 0.22);
+
   --color-fd-background: hsl(var(--hu-background));
   --color-fd-card: hsl(var(--hu-background));
+}
+
+@layer components {
+  .fm-page {
+    background: var(--fm-bg-light);
+    color: var(--fm-ink);
+  }
+
+  .fm-container {
+    @apply mx-auto w-full max-w-[1140px] px-4 sm:px-6 lg:px-8;
+  }
+
+  .fm-display {
+    font-family: var(--fm-font-display);
+  }
+
+  .fm-muted {
+    color: var(--fm-ink-muted);
+  }
+
+  .fm-shell {
+    background: var(--fm-shell-bg);
+    color: var(--fm-shell-text);
+  }
+
+  .fm-surface {
+    @apply rounded-2xl border;
+    border-color: var(--fm-shell-border);
+    background: var(--fm-shell-surface);
+    box-shadow: var(--fm-shadow-card);
+  }
+
+  .fm-surface-soft {
+    @apply rounded-xl border;
+    border-color: var(--fm-shell-border);
+    background: var(--fm-shell-surface-soft);
+    box-shadow: var(--fm-shadow-soft);
+  }
+
+  .fm-shell-muted {
+    color: var(--fm-shell-muted);
+  }
+
+  .fm-btn-primary {
+    @apply inline-flex items-center justify-center rounded-md px-4 py-2 text-sm font-semibold text-white transition;
+    background: var(--fm-accent);
+  }
+
+  .fm-btn-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  .fm-btn-outline {
+    @apply inline-flex items-center justify-center rounded-md border px-4 py-2 text-sm font-semibold transition;
+    border-color: var(--fm-shell-border);
+    color: var(--fm-shell-text);
+    background: transparent;
+  }
+
+  .fm-btn-outline:hover {
+    background: rgba(148, 163, 184, 0.12);
+  }
+
+  .fm-risk-low {
+    color: var(--fm-accent);
+    background: rgba(16, 185, 129, 0.16);
+  }
+
+  .fm-risk-medium {
+    color: var(--fm-warning);
+    background: rgba(245, 158, 11, 0.16);
+  }
+
+  .fm-risk-high {
+    color: var(--fm-danger);
+    background: rgba(239, 68, 68, 0.16);
+  }
 }
 
 .dark {
