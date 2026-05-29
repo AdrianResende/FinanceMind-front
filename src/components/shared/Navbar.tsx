@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Avatar } from '@/components/ui/avatar'
 import { DropdownMenu, DropdownMenuItem, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
-import { useAuthStore } from '@/stores'
+import { useAuthStore, useUIStore } from '@/stores'
 import { cn } from '@/lib/utils'
 
 interface NavItem {
@@ -21,6 +21,7 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
   const navigate = useNavigate()
   const location = useLocation()
   const { user, isAuthenticated, logout } = useAuthStore()
+  const { openLoginModal } = useUIStore()
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
   const dropdownRef = React.useRef<HTMLDivElement>(null)
 
@@ -43,6 +44,7 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
     : [
         { label: 'Início', href: '/' },
         { label: 'Como Funciona', href: '/#como-funciona' },
+        { label: 'Design System', href: '/design-system' },
       ]
 
   const navigationItems = items.length > 0 ? items : defaultItems
@@ -53,7 +55,7 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
         {/* Logo / Brand */}
         <div className="flex items-center gap-8">
           <Link to="/" className="flex items-center gap-2">
-            <span className="text-xl font-bold text-gray-900">{title}</span>
+            <span className="fm-display text-xl font-bold text-gray-900">{title}</span>
           </Link>
 
           {/* Navigation Links - Desktop */}
@@ -130,8 +132,8 @@ export function Navbar({ title = 'FinanceMind', items = [] }: NavbarProps) {
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <Button variant="outline" size="sm" asChild>
-                <Link to="/login">Entrar</Link>
+              <Button variant="brandOutline" size="sm" onClick={openLoginModal}>
+                Entrar
               </Button>
             </div>
           )}
